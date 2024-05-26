@@ -1,5 +1,6 @@
 #include "stdio.h"
 #include "string.h"
+#include <stdint.h>
 
 // Имя файла с зашифрованным текстом
 #define FILE_ENCRYPTED "encrypted.txt"
@@ -7,9 +8,11 @@
 #define FILE_OPENNED "openned.txt"
 
 // Ключ шифрования
-unsigned int key = 0;
+uint32_t key = 0;
+// Для промежуточных вычислений
+uint8_t tmp;
 // Количество букв
-unsigned int cnt = 0;
+uint16_t cnt = 0;
 // Символы для обработки
 char ch1, ch2 = 0;
 
@@ -42,11 +45,15 @@ int main() {
         // Считать символ из открытого текста
         ch2 = fgetc(foppened);
 
+        // Сбросить ключ
+        tmp = 0;
+
         // Если считали букву
         if ((ch1 > 64 && ch1 < 91) || (ch1 > 96 && ch1 < 123)) {
             // Получить разность букв
-            if (ch1 > ch2) key += ch1 - ch2;
-            else key += ch2 - ch1;
+            while (ch1 != ch2) { if (++ch2 > (90 + (32 * (ch1 > 96)))) ch2 -= 26; tmp++; }
+            // Прибавить найдённое значение ключа
+            key += tmp;
             // Прибавить количество 
             cnt++;
         }
