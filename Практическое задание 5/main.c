@@ -165,7 +165,7 @@ void useradd() {
 // Попробовать выйти из пользователя
 void logout() {
     // Если пользователь и так не вошёл
-    if (strcmp(username, "$")) {
+    if (!strcmp(username, "$")) {
         printf("No authorized user.\r\n");
         return;
     }
